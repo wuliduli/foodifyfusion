@@ -1,0 +1,38 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: meilisearch
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_MASTER_KEY: Qw3rT9!zXy7pLmN2vB6sDfGhJkL0pOiU8
+    volumes:
+      - meili_data:/meili_data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+      - meilisearch
+    environment:
+      MEILISEARCH_URL: http://meilisearch:7700
+
+volumes:
+  meili_data:

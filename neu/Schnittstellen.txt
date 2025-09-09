@@ -1,0 +1,55 @@
+Funktionen Authentifizierung: (REST)
+umw. in JSON zur bearbeitung
+- Anmeldung: POST x
+- Registrierung: POST x
+- Abmelden: ? => Vermutlich eher Frontend => Token löschen
+- Nutzerdaten: GET 
+
+Rezepte
+- StartseitenRezepte samt Rezept ID + Blob Image: GET xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+- Hochladen: POST
+- Bearbeitung: PUT
+	- Bild: POST
+- Löschung: DELETE
+
+Filter xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+- Namen: GET xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+- Tag: GET xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+- Allergien: GET xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+- Favoriten: 
+	- aktiv favorisieren: POST 
+	- Anzeigen: GET 
+- Bewertung:
+	- abgeben: POST xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	- Anschauen: GET xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+Eigene Rezepte	
+	nicht öffenltich
+	nur für Nutzerprofil
+
+ingredients: 
+- key: zutat(name)
+- vlaue: gramm/stückanzahl ...
+
+
+Flags:
+Alergene => extra Angabe; glutenfrei
+Diätformen => extra Angabe
+
+Personalisierte Filter => Zutatenliste durchsucht
+	Liste an Zutaten
+	
+
+später
+
+Automatisch aus Zutaten 2. Prio Tags mit Hinweis
+
+Grundsätzlich immer Hinweise mit wie bestimmt
+
+
+
+Grundsätzlich vllt. melden-Funktion
+Hinzufüge limit => ddos
+
+

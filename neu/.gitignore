@@ -1,0 +1,8 @@
+src/Backend/app/.env
+media/
+**/__pycache__/
+.42c/conf.yaml
+Schnittstellen_Auszug.md
+Schnittstellen_Auszug.txt
+.42c/scan/fastapi/scanconf.json
+modelle.md

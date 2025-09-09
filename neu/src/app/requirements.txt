@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+motor
+passlib[bcrypt]
+python-jose
+python-dotenv
+pydantic[email]
+python-multipart
+bcrypt==3.2.0
+meilisearch

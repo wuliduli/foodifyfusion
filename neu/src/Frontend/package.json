@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
+    "autoprefixer": "^10.4.21"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3"
+  }
+}
