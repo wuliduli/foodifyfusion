@@ -31,8 +31,9 @@ export default function Anmelden() {
       if (res.ok) {
         const data = await res.json();
         setSuccess("Login erfolgreich!");
-        // Optional: Token speichern, z.B. in localStorage
-        // localStorage.setItem("token", data.access_token);
+        if (data.access_token) {
+          localStorage.setItem("token", data.access_token);
+        }
         setEmail("");
         setPassword("");
         router.push("/components/AngemeldetStartseite"); // Nach Login weiterleiten

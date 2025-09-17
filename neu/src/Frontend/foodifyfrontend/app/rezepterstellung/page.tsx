@@ -9,10 +9,11 @@ import { Upload, Plus } from "lucide-react";
 import { FilterWithSearchbar } from "./popupWithSearch";
 import { useState } from "react";
 
-export default function rezepterstellung() {
+export default function RezeptErstellungPage() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [cookBakeTime, setCookBakeTime] = useState("");
+    const [ingredients, setIngredients] = useState("{}");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
@@ -23,18 +24,38 @@ export default function rezepterstellung() {
         setError("");
         setSuccess(false);
         try {
-            const response = await fetch("http://3.79.139.187:8000/recipes/", {
+            const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+            if (!token) throw new Error("Kein Token gefunden. Bitte zuerst einloggen.");
+            // Zutaten-JSON validieren
+            try {
+                JSON.parse(ingredients);
+            } catch {
+                setError("Zutaten ist kein gültiger JSON-String! Beispiel: {\"Mehl\":\"200g\"}");
+                setLoading(false);
+                return;
+            }
+            const formData = new FormData();
+            formData.append("title", title);
+            formData.append("description", description);
+            formData.append("cook_bake_time", cookBakeTime ? cookBakeTime.toString() : "");
+            formData.append("ingredients", ingredients);
+            formData.append("servings", "1");
+
+            const response = await fetch("http://3.79.139.187:8000/recipes/create", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({
-                    title,
-                    description,
-                    cook_bake_time: cookBakeTime ? parseInt(cookBakeTime, 10) : undefined,
-                }),
+                body: formData,
             });
-            if (!response.ok) throw new Error("Fehler beim Erstellen des Rezepts");
+            if (!response.ok) {
+                let msg = "Fehler beim Erstellen des Rezepts";
+                try {
+                    const data = await response.json();
+                    if (data.detail) msg += ": " + JSON.stringify(data.detail);
+                } catch {}
+                throw new Error(msg);
+            }
             setSuccess(true);
         } catch (err: any) {
             setError(err.message || "Unbekannter Fehler");
@@ -75,8 +96,15 @@ export default function rezepterstellung() {
             <div className="flex flex-row gap-10">
                 <div>
                     <form className={inputFieldEnvironmentColumn}>
-                        <label htmlFor="email" className={`${plainText} ${labelPadding}`}>Zutaten:</label>
-                        <FilterWithSearchbar />
+                        <label htmlFor="ingredients" className={`${plainText} ${labelPadding}`}>Zutaten (als JSON-String) *</label>
+                        <FilterWithSearchbar setIngredients={setIngredients} ingredients={ingredients} />
+                        <Input
+                            className={inputField + " mt-2"}
+                            value={ingredients}
+                            onChange={e => setIngredients(e.target.value)}
+                            placeholder='{"zutat": "Anzahl/Gewicht als String"}'
+                            required
+                        />
                     </form>
                 </div>
                 <div>

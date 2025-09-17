@@ -1,4 +1,6 @@
+
 "use client"
+import { Input } from "../../components/ui/input";
 
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
@@ -78,53 +80,67 @@ const frameworks = [
   },
 ]
 
-export function FilterWithSearchbar() {
+export function FilterWithSearchbar({ setIngredients, ingredients }: { setIngredients?: (val: string) => void, ingredients?: string }) {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [selected, setSelected] = React.useState<{ [key: string]: string }>(() => {
+    try {
+      return ingredients ? JSON.parse(ingredients) : {};
+    } catch {
+      return {};
+    }
+  });
+  const [zutat, setZutat] = React.useState("");
+  const [menge, setMenge] = React.useState("");
+
+  const handleAdd = () => {
+    if (!zutat || !menge) return;
+    const newSelected = { ...selected, [zutat]: menge };
+    setSelected(newSelected);
+    setZutat("");
+    setMenge("");
+    setIngredients && setIngredients(JSON.stringify(newSelected));
+  };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[200px] justify-between"
-        >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Zutaten / Gewicht"}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] h-[13rem] p-0">
-        <Command>
-          <CommandInput placeholder="Zutaten / Gewicht" />
-          <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
-            <CommandGroup>
-              {frameworks.map((framework) => (
-                <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
-                    setOpen(false)
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === framework.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {framework.label}
-                </CommandItem>
+    <div>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-[200px] justify-between"
+          >
+            Zutaten hinzufügen
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[250px] p-4">
+          <div className="flex flex-col gap-2">
+            <Input
+              placeholder="Zutat"
+              value={zutat}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setZutat(e.target.value)}
+            />
+            <Input
+              placeholder="Menge/Gewicht"
+              value={menge}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMenge(e.target.value)}
+            />
+            <Button type="button" onClick={handleAdd}>
+              Hinzufügen
+            </Button>
+          </div>
+          <div className="pt-2">
+            <div className="text-xs text-gray-500">Aktuelle Zutaten:</div>
+            <ul className="text-xs">
+              {Object.entries(selected).map(([k, v]) => (
+                <li key={k}>{k}: {v}</li>
               ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  )
+            </ul>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
 }
