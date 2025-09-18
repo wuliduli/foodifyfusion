@@ -1,36 +1,49 @@
 import Image from "next/image";
 
-export default function RezeptSchnellAnsicht() {
+export interface RezeptSchnellAnsichtProps {
+  title?: string;
+  description?: string;
+  cookBakeTime?: number;
+  imageUrl?: string;
+  averageRating?: number;
+}
+
+export default function RezeptSchnellAnsicht({
+  title = "Rezeptname auch lang +",
+  description,
+  cookBakeTime,
+  imageUrl,
+  averageRating
+}: RezeptSchnellAnsichtProps) {
   return (
     <a href="/rezeptansicht">
-    <div className="w-64 rounded-2xl shadow-lg bg-white overflow-hidden">
-      <Image
-        src="/rinderroulade.jpg" // Passe den Pfad ggf. an
-        alt="Rinderroulade"
-        width={260}
-        height={160}
-        className="w-full h-40 object-cover"
-      />
-      <div className="p-4">
-        <p className="font-semibold text-lg mb-2">Rezeptname auch lang +</p>
-        <div className="flex items-center mb-2">
-          {/* Sterne-Bewertung */}
-          <Star filled />
-          <Star filled />
-          <Star filled />
-          <Star filled />
-          <Star />
-        </div>
-        <div className="flex items-center text-base text-black">
-          {/* Uhr-Icon */}
-          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-            <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M12 6v6l4 2"/>
-          </svg>
-          24 Min
+      <div className="w-64 rounded-2xl shadow-lg bg-white overflow-hidden">
+        <Image
+          src={imageUrl || "/rinderroulade.jpg"}
+          alt={title}
+          width={260}
+          height={160}
+          className="w-full h-40 object-cover"
+        />
+        <div className="p-4">
+          <p className="font-semibold text-lg mb-2">{title}</p>
+          <div className="flex items-center mb-2">
+            {/* Sterne-Bewertung */}
+            {[1,2,3,4,5].map((i) => (
+              <Star key={i} filled={averageRating ? i <= Math.round(averageRating) : i <= 4} />
+            ))}
+          </div>
+          <div className="flex items-center text-base text-black">
+            {/* Uhr-Icon */}
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+              <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M12 6v6l4 2"/>
+            </svg>
+            {cookBakeTime ? `${cookBakeTime} Min` : "24 Min"}
+          </div>
+          {description && <div className="mt-2 text-sm text-gray-600">{description}</div>}
         </div>
       </div>
-    </div>
     </a>
   );
 }
