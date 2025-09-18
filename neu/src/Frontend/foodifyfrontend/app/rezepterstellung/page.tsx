@@ -107,12 +107,7 @@ export default function RezeptErstellungPage() {
                         />
                     </form>
                 </div>
-                <div>
-                    <form className={inputFieldEnvironmentColumn}>
-                        <label htmlFor="email" className={`${plainText} ${labelPadding}`}>Gewicht:</label>
-                        <FilterWithSearchbar />
-                    </form>
-                </div>
+
             </div>
             <div className={"flex flex-row items-center gap-5 " + labelPadding}>
                 <label className={plainText}>Hinzufügen</label>
